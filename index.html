@@ -7,29 +7,37 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-        #map { width: 100%; height: calc(100vh - 45px); }
+        #map { width: 100%; height: calc(100vh - 30px); }
         .controls {
-            height: auto;
-            min-height: 45px;
             background: #333;
-            padding: 5px 10px;
+            padding: 4px 10px;
             display: flex;
             align-items: center;
-            gap: 5px;
-            flex-wrap: wrap;
+            gap: 8px;
         }
-        .controls select, .controls button {
-            padding: 3px 6px;
+        .controls select {
+            padding: 2px 4px;
             border: none;
             border-radius: 3px;
-            font-size: 11px;
-            cursor: pointer;
-            white-space: nowrap;
+            font-size: 10px;
+            background: #fff;
         }
-        .controls select { background: #fff; }
-        .controls label { color: #fff; font-size: 10px; display: flex; align-items: center; gap: 2px; white-space: nowrap; }
-        .controls label input { width: 12px; height: 12px; }
-        .controls span { color: #fff; font-size: 11px; margin-left: auto; }
+        .ctrl-group {
+            display: flex;
+            gap: 6px;
+            flex-wrap: nowrap;
+        }
+        .ctrl-group label {
+            color: #fff;
+            font-size: 9px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .ctrl-group label input { width: 10px; height: 10px; }
+        .controls span { color: #fff; font-size: 10px; margin-left: auto; }
         .switch-container {
             display: flex;
             align-items: center;
@@ -103,32 +111,32 @@
 <body>
     <div class="controls">
         <select id="stageFilter" onchange="applyFilters()">
-            <option value="">전체 단계</option>
-            <option value="관리처분인가">관리처분인가</option>
-            <option value="사업시행인가">사업시행인가</option>
-            <option value="조합설립인가">조합설립인가</option>
-            <option value="추진위원회승인">추진위원회승인</option>
-            <option value="정비구역지정">정비구역지정</option>
+            <option value="">단계</option>
+            <option value="관리처분인가">관리처분</option>
+            <option value="사업시행인가">사업시행</option>
+            <option value="조합설립인가">조합설립</option>
+            <option value="추진위원회승인">추진위</option>
         </select>
         <select id="typeFilter" onchange="applyFilters()">
-            <option value="">전체 유형</option>
+            <option value="">유형</option>
             <option value="재개발">재개발</option>
             <option value="재건축">재건축</option>
-            <option value="3080">3080+도심공공</option>
         </select>
-        <label><input type="checkbox" id="showJungbi" onchange="applyFilters()" checked> 정비구역</label>
-        <label><input type="checkbox" id="showDosim" onchange="toggleDosim()" checked> 3080+</label>
-        <label><input type="checkbox" id="showSintong" onchange="toggleSintong()" checked> 신통기획</label>
-        <label><input type="checkbox" id="showMoatown" onchange="toggleMoatown()" checked> 모아타운</label>
-        <label><input type="checkbox" id="showMaemul" onchange="toggleMaemul()" checked> 매물</label>
+        <div class="ctrl-group">
+            <label><input type="checkbox" id="showJungbi" onchange="applyFilters()" checked>정비</label>
+            <label><input type="checkbox" id="showDosim" onchange="toggleDosim()" checked>3080</label>
+            <label><input type="checkbox" id="showSintong" onchange="toggleSintong()" checked>신통</label>
+            <label><input type="checkbox" id="showMoatown" onchange="toggleMoatown()" checked>모아</label>
+            <label><input type="checkbox" id="showMaemul" onchange="toggleMaemul()" checked>매물</label>
+        </div>
         <div class="switch-container">
-            <span style="color:#fff;font-size:11px;">구역내만</span>
+            <span style="color:#fff;font-size:9px;">구역내</span>
             <label class="switch">
                 <input type="checkbox" id="onlyMatched" onchange="toggleMaemul()">
                 <span class="slider"></span>
             </label>
         </div>
-        <span id="status">로딩중...</span>
+        <span id="status"></span>
     </div>
     <div id="map"></div>
 
