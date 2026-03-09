@@ -75,21 +75,28 @@
         .popup-table td:last-child { font-weight: 500; }
         .match-badge { display: inline-block; padding: 2px 6px; border-radius: 8px; font-size: 10px; font-weight: bold; color: white; margin: 2px; }
         .polygon-label {
-            background: rgba(255,255,255,0.85) !important;
-            border: 1px solid #999 !important;
+            background: rgba(255,255,255,0.9) !important;
+            border: 1px solid #666 !important;
             border-radius: 3px !important;
-            padding: 2px 5px !important;
-            font-size: 10px;
+            padding: 1px 4px !important;
+            font-size: 8px;
             font-weight: bold;
-            color: #333;
-            white-space: nowrap;
-            box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+            white-space: normal !important;
+            max-width: 80px !important;
+            text-align: center;
+            line-height: 1.2;
+            box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
         }
         .polygon-label::before { display: none !important; }
-        .label-3080 { color: #D32F2F !important; background: rgba(255,235,235,0.95) !important; border-color: #D32F2F !important; font-size: 11px; }
-        .label-sintong { color: #00838F !important; background: rgba(224,247,250,0.95) !important; border-color: #00BCD4 !important; }
-        .label-moatown { color: #558B2F !important; background: rgba(241,248,233,0.95) !important; border-color: #8BC34A !important; }
-        .label-jungbi { color: #333 !important; font-size: 9px; }
+        .label-3080 { color: #fff !important; background: #D32F2F !important; border-color: #D32F2F !important; }
+        .label-sintong { color: #fff !important; background: #00838F !important; border-color: #00838F !important; }
+        .label-moatown { color: #fff !important; background: #558B2F !important; border-color: #558B2F !important; }
+        .label-stage-1 { color: #fff !important; background: #2196F3 !important; border-color: #2196F3 !important; }
+        .label-stage-2 { color: #fff !important; background: #9C27B0 !important; border-color: #9C27B0 !important; }
+        .label-stage-3 { color: #fff !important; background: #FF9800 !important; border-color: #FF9800 !important; }
+        .label-stage-4 { color: #fff !important; background: #FF5722 !important; border-color: #FF5722 !important; }
+        .label-stage-5 { color: #fff !important; background: #795548 !important; border-color: #795548 !important; }
+        .label-stage-6 { color: #333 !important; background: #E0E0E0 !important; border-color: #999 !important; }
     </style>
 </head>
 <body>
@@ -126,17 +133,18 @@
 
     <div class="info-box">
         <strong>서울시 정비사업 현황</strong><br>
-        정비구역 896 | 3080+ 20 | 신통 83 | 모아 61<br>
+        정비구역 1,531 | 3080+ 20 | 신통 83 | 모아 61<br>
         매물 6,630 (정비42 | 3080+159 | 신통48 | 모아72)
     </div>
 
     <div class="legend">
-        <strong>정비구역 진행단계</strong>
+        <strong>정비구역 (1,531) - 레이블색상</strong>
         <div class="legend-item"><div class="legend-color" style="background:#2196F3"></div>관리처분인가</div>
         <div class="legend-item"><div class="legend-color" style="background:#9C27B0"></div>사업시행인가</div>
         <div class="legend-item"><div class="legend-color" style="background:#FF9800"></div>조합설립인가</div>
         <div class="legend-item"><div class="legend-color" style="background:#FF5722"></div>추진위원회</div>
         <div class="legend-item"><div class="legend-color" style="background:#795548"></div>정비구역지정</div>
+        <div class="legend-item"><div class="legend-color" style="background:#E0E0E0"></div>기타</div>
         <hr style="margin:8px 0">
         <strong>특수 사업</strong>
         <div class="legend-item"><div class="legend-color" style="background:#F44336"></div>3080+ 도심공공 (20)</div>
@@ -226,9 +234,7 @@
                     return true;
                 },
                 style: feature => {
-                    const stage = feature.properties['진행단계'] || '-';
-                    const color = getColor(stage);
-                    return { color, weight: 2, opacity: 0.9, fillColor: color, fillOpacity: 0.35 };
+                    return { color: '#03A9F4', weight: 2, opacity: 0.8, fillColor: '#03A9F4', fillOpacity: 0.25 };
                 },
                 onEachFeature: (feature, layer) => {
                     const p = feature.properties;
@@ -241,17 +247,24 @@
                         <b>구역유형:</b> ${p['구역유형'] || '-'}<br>
                         <b>면적:</b> ${area}
                     `);
-                    // 상시 레이블
+                    // 상시 레이블 (단계별 색상)
                     const name = p.DGM_NM || '';
-                    if (name && name.length < 25) {
+                    if (name && name.length < 30) {
+                        let labelClass = 'label-stage-6';
+                        if (stage === '관리처분인가') labelClass = 'label-stage-1';
+                        else if (stage === '사업시행인가') labelClass = 'label-stage-2';
+                        else if (stage === '조합설립인가') labelClass = 'label-stage-3';
+                        else if (stage.includes('추진위')) labelClass = 'label-stage-4';
+                        else if (stage === '정비구역지정') labelClass = 'label-stage-5';
+
                         layer.bindTooltip(name, {
                             permanent: true,
                             direction: 'center',
-                            className: 'polygon-label label-jungbi'
+                            className: 'polygon-label ' + labelClass
                         });
                     }
-                    layer.on('mouseover', () => layer.setStyle({ fillOpacity: 0.6 }));
-                    layer.on('mouseout', () => layer.setStyle({ fillOpacity: 0.35 }));
+                    layer.on('mouseover', () => layer.setStyle({ fillOpacity: 0.5 }));
+                    layer.on('mouseout', () => layer.setStyle({ fillOpacity: 0.25 }));
                 }
             }).addTo(map);
             updateStatus();
