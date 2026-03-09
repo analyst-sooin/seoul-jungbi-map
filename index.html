@@ -399,19 +399,19 @@
                     if (p['모아타운']) matchInfo += `<tr><td>모아타운</td><td>${p['모아타운']}</td></tr>`;
 
                     layer.bindPopup(`
-                        <strong>${p['시구']} ${p['동']}</strong><br>
-                        <span style="font-size:11px;color:#666">${p['주소'] || ''}</span><br>
+                        <strong>${p['시구']} ${p['동']}</strong> <span style="font-size:10px;color:#999">${p['매물번호']}</span><br>
+                        <span style="font-size:10px;color:#666">${p['주소'] || ''}</span><br>
                         ${badges}
                         <table class="popup-table">
-                            <tr><td>감정가</td><td><b>${p['감정가']}</b> 만원</td></tr>
-                            <tr><td>최저가</td><td><b style="color:#E91E63">${p['최저가']}</b> 만원 (${p['비율']})</td></tr>
-                            <tr><td>AI추정가</td><td><b style="color:#2196F3">${p['AI추정가'] || '-'}</b> 만원</td></tr>
+                            <tr><td>감정가</td><td><b>${p['감정가']}</b></td></tr>
+                            <tr><td>최저가</td><td><b style="color:#E91E63">${p['최저가']}</b> (${p['비율']})</td></tr>
+                            <tr><td>AI추정가</td><td><b style="color:#2196F3">${p['AI추정가'] || '-'}</b></td></tr>
+                            <tr><td>예상감정</td><td>${p['예상감정평가'] || '-'}</td></tr>
+                            <tr><td>전세보증</td><td>${p['전세보증보험'] || '-'}</td></tr>
+                            <tr><td>프리미엄</td><td style="color:${parseFloat(p['프리미엄']?.replace(/,/g,''))>=0?'#4CAF50':'#E91E63'}">${p['프리미엄'] || '-'}</td></tr>
+                            <tr><td>갭투자금</td><td>${p['갭투자금'] || '-'}</td></tr>
                             <tr><td>전용</td><td>${p['전용면적']}㎡ (${p['전용평수']}평)</td></tr>
-                            <tr><td>유찰</td><td>${p['유찰횟수']}회</td></tr>
-                            <tr><td>매각기일</td><td>${p['매각기일']}</td></tr>
-                            <tr><td>이용상태</td><td>${p['이용상태']}</td></tr>
-                            ${p['공시가격'] ? `<tr><td>공시가격</td><td>${p['공시가격']} 만원</td></tr>` : ''}
-                            ${p['최근실거래가'] ? `<tr><td>실거래</td><td>${p['최근실거래가']} 만원</td></tr>` : ''}
+                            <tr><td>유찰/기일</td><td>${p['유찰횟수']}회 | ${p['매각기일']}</td></tr>
                             ${matchInfo}
                         </table>
                     `);
