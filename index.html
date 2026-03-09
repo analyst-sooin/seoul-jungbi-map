@@ -130,7 +130,7 @@
         <div class="switch-container">
             <span style="color:#fff;font-size:9px;">구역내</span>
             <label class="switch">
-                <input type="checkbox" id="onlyMatched" onchange="toggleMaemul()">
+                <input type="checkbox" id="onlyMatched" onchange="toggleOnlyMatched()">
                 <span class="slider"></span>
             </label>
         </div>
@@ -357,6 +357,30 @@
                     layer.on('mouseout', () => layer.setStyle({ fillOpacity: 0.25 }));
                 }
             }).addTo(map);
+        }
+
+        function toggleOnlyMatched() {
+            const onlyMatched = document.getElementById('onlyMatched').checked;
+            const ctrlGroup = document.querySelector('.ctrl-group');
+
+            if (onlyMatched) {
+                // 폴리곤 레이어 숨기기
+                if (geojsonLayer) map.removeLayer(geojsonLayer);
+                if (dosimLayer) map.removeLayer(dosimLayer);
+                if (sintongLayer) map.removeLayer(sintongLayer);
+                if (moatownLayer) map.removeLayer(moatownLayer);
+                // 체크박스 숨기기
+                ctrlGroup.style.opacity = '0.3';
+            } else {
+                // 체크박스 보이기
+                ctrlGroup.style.opacity = '1';
+                // 레이어 복원
+                applyFilters();
+                toggleDosim();
+                toggleSintong();
+                toggleMoatown();
+            }
+            toggleMaemul();
         }
 
         function toggleMaemul() {
