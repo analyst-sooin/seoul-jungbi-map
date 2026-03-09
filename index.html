@@ -75,18 +75,21 @@
         .popup-table td:last-child { font-weight: 500; }
         .match-badge { display: inline-block; padding: 2px 6px; border-radius: 8px; font-size: 10px; font-weight: bold; color: white; margin: 2px; }
         .polygon-label {
-            background: transparent;
-            border: none;
+            background: rgba(255,255,255,0.85) !important;
+            border: 1px solid #999 !important;
+            border-radius: 3px !important;
+            padding: 2px 5px !important;
             font-size: 10px;
             font-weight: bold;
             color: #333;
-            text-shadow: 1px 1px 1px #fff, -1px -1px 1px #fff, 1px -1px 1px #fff, -1px 1px 1px #fff;
             white-space: nowrap;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
         }
-        .label-3080 { color: #D32F2F; font-size: 11px; }
-        .label-sintong { color: #00838F; }
-        .label-moatown { color: #558B2F; }
-        .label-jungbi { color: #333; font-size: 9px; }
+        .polygon-label::before { display: none !important; }
+        .label-3080 { color: #D32F2F !important; background: rgba(255,235,235,0.95) !important; border-color: #D32F2F !important; font-size: 11px; }
+        .label-sintong { color: #00838F !important; background: rgba(224,247,250,0.95) !important; border-color: #00BCD4 !important; }
+        .label-moatown { color: #558B2F !important; background: rgba(241,248,233,0.95) !important; border-color: #8BC34A !important; }
+        .label-jungbi { color: #333 !important; font-size: 9px; }
     </style>
 </head>
 <body>
@@ -382,6 +385,7 @@
                         <table class="popup-table">
                             <tr><td>감정가</td><td><b>${p['감정가']}</b> 만원</td></tr>
                             <tr><td>최저가</td><td><b style="color:#E91E63">${p['최저가']}</b> 만원 (${p['비율']})</td></tr>
+                            ${p['AI추정가'] ? `<tr><td>AI추정가</td><td><b style="color:#2196F3">${p['AI추정가']}</b> 만원</td></tr>` : ''}
                             <tr><td>전용</td><td>${p['전용면적']}㎡ (${p['전용평수']}평)</td></tr>
                             <tr><td>유찰</td><td>${p['유찰횟수']}회</td></tr>
                             <tr><td>매각기일</td><td>${p['매각기일']}</td></tr>
