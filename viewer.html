@@ -27,8 +27,6 @@
             white-space: nowrap;
         }
         .controls select { background: #fff; }
-        .controls button { background: #2196F3; color: white; }
-        .controls button:hover { background: #1976D2; }
         .controls label { color: #fff; font-size: 12px; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
         .controls span { color: #fff; font-size: 13px; margin-left: auto; }
         .switch-container {
@@ -39,83 +37,43 @@
             padding: 4px 10px;
             border-radius: 15px;
         }
-        .switch {
-            position: relative;
-            width: 36px;
-            height: 20px;
-        }
+        .switch { position: relative; width: 36px; height: 20px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider {
-            position: absolute;
-            cursor: pointer;
+            position: absolute; cursor: pointer;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #ccc;
-            transition: .3s;
-            border-radius: 20px;
+            background-color: #ccc; transition: .3s; border-radius: 20px;
         }
         .slider:before {
-            position: absolute;
-            content: "";
-            height: 14px;
-            width: 14px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .3s;
-            border-radius: 50%;
+            position: absolute; content: "";
+            height: 14px; width: 14px; left: 3px; bottom: 3px;
+            background-color: white; transition: .3s; border-radius: 50%;
         }
         input:checked + .slider { background-color: #4CAF50; }
         input:checked + .slider:before { transform: translateX(16px); }
         .legend {
-            position: absolute;
-            bottom: 30px;
-            right: 10px;
-            background: rgba(255,255,255,0.95);
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 11px;
-            z-index: 1000;
+            position: absolute; bottom: 30px; right: 10px;
+            background: rgba(255,255,255,0.95); padding: 12px;
+            border-radius: 6px; font-size: 11px; z-index: 1000;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            max-height: 400px;
-            overflow-y: auto;
+            max-height: 450px; overflow-y: auto;
         }
         .legend-item { display: flex; align-items: center; margin: 4px 0; }
         .legend-color { width: 16px; height: 12px; margin-right: 6px; border: 1px solid #333; }
         .leaflet-popup-content { font-size: 12px; line-height: 1.5; min-width: 250px; }
         .leaflet-popup-content strong { font-size: 14px; }
-        .stage-badge {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 11px;
-            font-weight: bold;
-            color: white;
-            margin: 3px 2px;
-        }
+        .stage-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold; color: white; margin: 3px 2px; }
         .info-box {
-            position: absolute;
-            top: 60px;
-            left: 10px;
-            background: rgba(255,255,255,0.95);
-            padding: 10px 15px;
-            border-radius: 6px;
-            font-size: 12px;
-            z-index: 1000;
+            position: absolute; top: 60px; left: 10px;
+            background: rgba(255,255,255,0.95); padding: 10px 15px;
+            border-radius: 6px; font-size: 12px; z-index: 1000;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
         .popup-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
         .popup-table td { padding: 3px 5px; border-bottom: 1px solid #eee; }
         .popup-table td:first-child { color: #666; width: 70px; }
         .popup-table td:last-child { font-weight: 500; }
-        .match-badge {
-            display: inline-block;
-            padding: 2px 6px;
-            border-radius: 8px;
-            font-size: 10px;
-            font-weight: bold;
-            color: white;
-            margin: 2px;
-        }
+        .match-badge { display: inline-block; padding: 2px 6px; border-radius: 8px; font-size: 10px; font-weight: bold; color: white; margin: 2px; }
     </style>
 </head>
 <body>
@@ -127,15 +85,15 @@
             <option value="조합설립인가">조합설립인가</option>
             <option value="추진위원회승인">추진위원회승인</option>
             <option value="정비구역지정">정비구역지정</option>
-            <option value="정비계획 수립">정비계획 수립</option>
         </select>
         <select id="typeFilter" onchange="applyFilters()">
             <option value="">전체 유형</option>
             <option value="재개발">재개발</option>
             <option value="재건축">재건축</option>
-            <option value="촉진">재정비촉진</option>
+            <option value="3080">3080+도심공공</option>
         </select>
         <label><input type="checkbox" id="showJungbi" onchange="applyFilters()" checked> 정비구역</label>
+        <label><input type="checkbox" id="showDosim" onchange="toggleDosim()" checked> 3080+</label>
         <label><input type="checkbox" id="showSintong" onchange="toggleSintong()" checked> 신통기획</label>
         <label><input type="checkbox" id="showMoatown" onchange="toggleMoatown()" checked> 모아타운</label>
         <label><input type="checkbox" id="showMaemul" onchange="toggleMaemul()" checked> 매물</label>
@@ -152,8 +110,8 @@
 
     <div class="info-box">
         <strong>서울시 정비사업 현황</strong><br>
-        정비구역 876 | 신통 83 | 모아타운 61<br>
-        매물 6,630 (정비 42 | 모아 72 | 신통 48)
+        정비구역 896 | 3080+ 20 | 신통 83 | 모아 61<br>
+        매물 6,630 (정비42 | 3080+159 | 신통48 | 모아72)
     </div>
 
     <div class="legend">
@@ -163,44 +121,31 @@
         <div class="legend-item"><div class="legend-color" style="background:#FF9800"></div>조합설립인가</div>
         <div class="legend-item"><div class="legend-color" style="background:#FF5722"></div>추진위원회</div>
         <div class="legend-item"><div class="legend-color" style="background:#795548"></div>정비구역지정</div>
-        <div class="legend-item"><div class="legend-color" style="background:#607D8B"></div>정비계획 수립</div>
         <hr style="margin:8px 0">
-        <strong>신통기획/모아타운</strong>
+        <strong>특수 사업</strong>
+        <div class="legend-item"><div class="legend-color" style="background:#F44336"></div>3080+ 도심공공 (20)</div>
         <div class="legend-item"><div class="legend-color" style="background:#00BCD4"></div>신통기획 (83)</div>
         <div class="legend-item"><div class="legend-color" style="background:#8BC34A"></div>모아타운 (61)</div>
         <hr style="margin:8px 0">
         <strong>매물 (6,630)</strong>
-        <div class="legend-item"><div class="legend-color" style="background:#4CAF50; border-radius:50%"></div>정비구역 내 (42)</div>
-        <div class="legend-item"><div class="legend-color" style="background:#00BCD4; border-radius:50%"></div>신통기획 내 (48)</div>
-        <div class="legend-item"><div class="legend-color" style="background:#8BC34A; border-radius:50%"></div>모아타운 내 (72)</div>
-        <div class="legend-item"><div class="legend-color" style="background:#E91E63; border-radius:50%"></div>일반 매물</div>
+        <div class="legend-item"><div class="legend-color" style="background:#4CAF50; border-radius:50%"></div>정비구역 (42)</div>
+        <div class="legend-item"><div class="legend-color" style="background:#F44336; border-radius:50%"></div>3080+ (159)</div>
+        <div class="legend-item"><div class="legend-color" style="background:#00BCD4; border-radius:50%"></div>신통기획 (48)</div>
+        <div class="legend-item"><div class="legend-color" style="background:#8BC34A; border-radius:50%"></div>모아타운 (72)</div>
+        <div class="legend-item"><div class="legend-color" style="background:#E91E63; border-radius:50%"></div>일반</div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // 색상
         const stageColors = {
-            '관리처분인가': '#2196F3',
-            '사업시행인가': '#9C27B0',
-            '조합설립인가': '#FF9800',
-            '추진위원회승인': '#FF5722',
-            '추진위구성': '#FF5722',
-            '정비구역지정': '#795548',
-            '정비계획 수립': '#607D8B',
-            '조합원 모집신고': '#FF9800',
-            '조합창립총회': '#FF9800',
-            '안전진단': '#607D8B',
-            '-': '#BDBDBD'
+            '관리처분인가': '#2196F3', '사업시행인가': '#9C27B0', '조합설립인가': '#FF9800',
+            '추진위원회승인': '#FF5722', '추진위구성': '#FF5722', '정비구역지정': '#795548',
+            '정비계획 수립': '#607D8B', '이주중': '#F44336', '보상준비': '#F44336',
+            '설계준비': '#F44336', '예정지구지정': '#F44336', '추진중': '#F44336', '-': '#BDBDBD'
         };
+        function getColor(stage) { return stageColors[stage] || '#9E9E9E'; }
 
-        function getColor(stage) {
-            return stageColors[stage] || '#9E9E9E';
-        }
-
-        // 지도 초기화
         const map = L.map('map').setView([37.5665, 126.9780], 11);
-
-        // 매물용 pane (폴리곤 위에 표시)
         map.createPane('maemulPane');
         map.getPane('maemulPane').style.zIndex = 650;
 
@@ -208,49 +153,38 @@
             attribution: '&copy; OpenStreetMap'
         }).addTo(map);
 
-        // 레이어 변수
         let geojsonLayer = null, geojsonData = null;
+        let dosimLayer = null, dosimData = null;
         let sintongLayer = null, sintongData = null;
         let moatownLayer = null, moatownData = null;
         let maemulLayer = null, maemulData = null;
 
-        // 정비구역 로드
-        fetch('jungbi_active.geojson')
-            .then(res => res.json())
-            .then(data => {
-                geojsonData = data;
-                applyFilters();
-                updateStatus();
-            });
-
-        // 신통기획 로드
-        fetch('sintong_polygon.geojson')
-            .then(res => res.json())
-            .then(data => {
-                sintongData = data;
-                toggleSintong();
-            });
-
-        // 모아타운 로드
-        fetch('moatown_polygon.geojson')
-            .then(res => res.json())
-            .then(data => {
-                moatownData = data;
-                toggleMoatown();
-            });
-
-        // 매물 로드
-        fetch('maemul.geojson')
-            .then(res => res.json())
-            .then(data => {
-                maemulData = data;
-                toggleMaemul();
-            });
+        fetch('jungbi_active.geojson').then(res => res.json()).then(data => {
+            geojsonData = data;
+            applyFilters();
+            updateStatus();
+        });
+        fetch('dosim3080_polygon.geojson').then(res => res.json()).then(data => {
+            dosimData = data;
+            toggleDosim();
+        });
+        fetch('sintong_polygon.geojson').then(res => res.json()).then(data => {
+            sintongData = data;
+            toggleSintong();
+        });
+        fetch('moatown_polygon.geojson').then(res => res.json()).then(data => {
+            moatownData = data;
+            toggleMoatown();
+        });
+        fetch('maemul.geojson').then(res => res.json()).then(data => {
+            maemulData = data;
+            toggleMaemul();
+        });
 
         function updateStatus() {
-            const jungbiCount = geojsonLayer ? geojsonLayer.getLayers().length : 0;
-            const maemulCount = maemulLayer ? maemulLayer.getLayers().length : 0;
-            document.getElementById('status').textContent = `정비: ${jungbiCount} | 매물: ${maemulCount}`;
+            const jc = geojsonLayer ? geojsonLayer.getLayers().length : 0;
+            const mc = maemulLayer ? maemulLayer.getLayers().length : 0;
+            document.getElementById('status').textContent = `정비: ${jc} | 매물: ${mc}`;
         }
 
         function applyFilters() {
@@ -263,15 +197,16 @@
 
             geojsonLayer = L.geoJSON(geojsonData, {
                 filter: feature => {
-                    const stage = feature.properties['진행단계'] || '-';
-                    const name = feature.properties['DGM_NM'] || '';
-                    const type = feature.properties['구역유형'] || '';
+                    const p = feature.properties;
+                    const stage = p['진행단계'] || '-';
+                    const name = p['DGM_NM'] || '';
+                    const type = p['구역유형'] || '';
+                    const is3080 = type.includes('도심공공') || name.includes('3080');
+
+                    if (is3080) return false; // 3080+는 별도 레이어
                     if (stageFilter && stage !== stageFilter) return false;
-                    if (typeFilter) {
-                        if (typeFilter === '재개발' && !type.includes('재개발') && !name.includes('재개발')) return false;
-                        if (typeFilter === '재건축' && !type.includes('재건축') && !name.includes('재건축')) return false;
-                        if (typeFilter === '촉진' && !type.includes('촉진')) return false;
-                    }
+                    if (typeFilter === '재개발' && !type.includes('재개발') && !name.includes('재개발')) return false;
+                    if (typeFilter === '재건축' && !type.includes('재건축') && !name.includes('재건축')) return false;
                     return true;
                 },
                 style: feature => {
@@ -295,6 +230,28 @@
                 }
             }).addTo(map);
             updateStatus();
+        }
+
+        function toggleDosim() {
+            if (dosimLayer) map.removeLayer(dosimLayer);
+            if (!document.getElementById('showDosim').checked || !dosimData) return;
+
+            dosimLayer = L.geoJSON(dosimData, {
+                style: { color: '#F44336', weight: 3, opacity: 0.9, fillColor: '#F44336', fillOpacity: 0.35 },
+                onEachFeature: (feature, layer) => {
+                    const p = feature.properties;
+                    layer.bindPopup(`
+                        <strong style="color:#F44336">${p['DGM_NM']}</strong><br>
+                        <span class="stage-badge" style="background:#F44336">${p['진행단계']}</span><br><br>
+                        <b>자치구:</b> ${p['자치구']}<br>
+                        <b>위치:</b> ${p['위치']}<br>
+                        <b>면적:</b> ${(p['면적']/10000).toFixed(2)} 만㎡<br>
+                        <b>세대수:</b> ${p['세대수'].toLocaleString()}세대
+                    `);
+                    layer.on('mouseover', () => layer.setStyle({ fillOpacity: 0.6 }));
+                    layer.on('mouseout', () => layer.setStyle({ fillOpacity: 0.35 }));
+                }
+            }).addTo(map);
         }
 
         function toggleSintong() {
@@ -350,42 +307,33 @@
                 filter: feature => {
                     if (!onlyMatched) return true;
                     const p = feature.properties;
-                    return p.in_jungbi || p.in_moatown || p.in_sintong;
+                    return p.in_jungbi || p.in_moatown || p.in_sintong || p.in_dosim;
                 },
                 pointToLayer: (feature, latlng) => {
                     const p = feature.properties;
-                    let color = '#E91E63'; // 일반 매물
-                    let radius = 6;
+                    let color = '#E91E63', radius = 6;
                     if (p.in_jungbi) { color = '#4CAF50'; radius = 8; }
+                    else if (p.in_dosim) { color = '#F44336'; radius = 8; }
                     else if (p.in_sintong) { color = '#00BCD4'; radius = 7; }
                     else if (p.in_moatown) { color = '#8BC34A'; radius = 7; }
                     return L.circleMarker(latlng, {
-                        pane: 'maemulPane',
-                        radius: radius,
-                        fillColor: color,
-                        color: '#fff',
-                        weight: 2,
-                        opacity: 1,
-                        fillOpacity: 0.85
+                        pane: 'maemulPane', radius, fillColor: color,
+                        color: '#fff', weight: 2, opacity: 1, fillOpacity: 0.85
                     });
                 },
                 onEachFeature: (feature, layer) => {
                     const p = feature.properties;
-
-                    // 매칭 배지
                     let badges = '';
-                    if (p.in_jungbi) badges += `<span class="match-badge" style="background:#4CAF50">정비구역</span>`;
-                    if (p.in_sintong) badges += `<span class="match-badge" style="background:#00BCD4">신통기획</span>`;
-                    if (p.in_moatown) badges += `<span class="match-badge" style="background:#8BC34A">모아타운</span>`;
+                    if (p.in_jungbi) badges += '<span class="match-badge" style="background:#4CAF50">정비구역</span>';
+                    if (p.in_dosim) badges += '<span class="match-badge" style="background:#F44336">3080+</span>';
+                    if (p.in_sintong) badges += '<span class="match-badge" style="background:#00BCD4">신통기획</span>';
+                    if (p.in_moatown) badges += '<span class="match-badge" style="background:#8BC34A">모아타운</span>';
 
-                    // 매칭 상세 정보
                     let matchInfo = '';
                     if (p['정비구역']) matchInfo += `<tr><td>정비구역</td><td>${p['정비구역']}</td></tr>`;
-                    if (p['정비단계']) matchInfo += `<tr><td>정비단계</td><td>${p['정비단계']}</td></tr>`;
+                    if (p['도심공공']) matchInfo += `<tr><td>3080+</td><td>${p['도심공공']}</td></tr>`;
                     if (p['신통구역']) matchInfo += `<tr><td>신통기획</td><td>${p['신통구역']}</td></tr>`;
-                    if (p['신통단계']) matchInfo += `<tr><td>신통단계</td><td>${p['신통단계']}</td></tr>`;
                     if (p['모아타운']) matchInfo += `<tr><td>모아타운</td><td>${p['모아타운']}</td></tr>`;
-                    if (p['모아현황']) matchInfo += `<tr><td>모아현황</td><td>${p['모아현황']}</td></tr>`;
 
                     layer.bindPopup(`
                         <strong>${p['시구']} ${p['동']}</strong><br>
@@ -399,7 +347,7 @@
                             <tr><td>매각기일</td><td>${p['매각기일']}</td></tr>
                             <tr><td>이용상태</td><td>${p['이용상태']}</td></tr>
                             ${p['공시가격'] ? `<tr><td>공시가격</td><td>${p['공시가격']} 만원</td></tr>` : ''}
-                            ${p['최근실거래가'] ? `<tr><td>최근실거래</td><td>${p['최근실거래가']} 만원</td></tr>` : ''}
+                            ${p['최근실거래가'] ? `<tr><td>실거래</td><td>${p['최근실거래가']} 만원</td></tr>` : ''}
                             ${matchInfo}
                         </table>
                     `);
