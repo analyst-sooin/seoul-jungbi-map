@@ -385,7 +385,7 @@
                         <table class="popup-table">
                             <tr><td>감정가</td><td><b>${p['감정가']}</b> 만원</td></tr>
                             <tr><td>최저가</td><td><b style="color:#E91E63">${p['최저가']}</b> 만원 (${p['비율']})</td></tr>
-                            ${p['AI추정가'] ? `<tr><td>AI추정가</td><td><b style="color:#2196F3">${p['AI추정가']}</b> 만원</td></tr>` : ''}
+                            <tr><td>AI추정가</td><td><b style="color:#2196F3">${p['AI추정가'] || '-'}</b> 만원</td></tr>
                             <tr><td>전용</td><td>${p['전용면적']}㎡ (${p['전용평수']}평)</td></tr>
                             <tr><td>유찰</td><td>${p['유찰횟수']}회</td></tr>
                             <tr><td>매각기일</td><td>${p['매각기일']}</td></tr>
