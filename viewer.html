@@ -74,6 +74,19 @@
         .popup-table td:first-child { color: #666; width: 70px; }
         .popup-table td:last-child { font-weight: 500; }
         .match-badge { display: inline-block; padding: 2px 6px; border-radius: 8px; font-size: 10px; font-weight: bold; color: white; margin: 2px; }
+        .polygon-label {
+            background: transparent;
+            border: none;
+            font-size: 10px;
+            font-weight: bold;
+            color: #333;
+            text-shadow: 1px 1px 1px #fff, -1px -1px 1px #fff, 1px -1px 1px #fff, -1px 1px 1px #fff;
+            white-space: nowrap;
+        }
+        .label-3080 { color: #D32F2F; font-size: 11px; }
+        .label-sintong { color: #00838F; }
+        .label-moatown { color: #558B2F; }
+        .label-jungbi { color: #333; font-size: 9px; }
     </style>
 </head>
 <body>
@@ -225,6 +238,15 @@
                         <b>구역유형:</b> ${p['구역유형'] || '-'}<br>
                         <b>면적:</b> ${area}
                     `);
+                    // 상시 레이블
+                    const name = p.DGM_NM || '';
+                    if (name && name.length < 25) {
+                        layer.bindTooltip(name, {
+                            permanent: true,
+                            direction: 'center',
+                            className: 'polygon-label label-jungbi'
+                        });
+                    }
                     layer.on('mouseover', () => layer.setStyle({ fillOpacity: 0.6 }));
                     layer.on('mouseout', () => layer.setStyle({ fillOpacity: 0.35 }));
                 }
@@ -248,6 +270,12 @@
                         <b>면적:</b> ${(p['면적']/10000).toFixed(2)} 만㎡<br>
                         <b>세대수:</b> ${p['세대수'].toLocaleString()}세대
                     `);
+                    // 상시 레이블
+                    layer.bindTooltip(p['DGM_NM'], {
+                        permanent: true,
+                        direction: 'center',
+                        className: 'polygon-label label-3080'
+                    });
                     layer.on('mouseover', () => layer.setStyle({ fillOpacity: 0.6 }));
                     layer.on('mouseout', () => layer.setStyle({ fillOpacity: 0.35 }));
                 }
@@ -269,6 +297,12 @@
                         <b>면적:</b> ${p['면적']}<br>
                         <b>세대수:</b> ${p['세대수']}
                     `);
+                    // 상시 레이블
+                    layer.bindTooltip(p['구역명'], {
+                        permanent: true,
+                        direction: 'center',
+                        className: 'polygon-label label-sintong'
+                    });
                     layer.on('mouseover', () => layer.setStyle({ fillOpacity: 0.5 }));
                     layer.on('mouseout', () => layer.setStyle({ fillOpacity: 0.25 }));
                 }
@@ -290,6 +324,12 @@
                         <b>면적:</b> ${p['면적']}<br>
                         <b>세대수:</b> ${p['세대수']}
                     `);
+                    // 상시 레이블
+                    layer.bindTooltip(p['위치'], {
+                        permanent: true,
+                        direction: 'center',
+                        className: 'polygon-label label-moatown'
+                    });
                     layer.on('mouseover', () => layer.setStyle({ fillOpacity: 0.5 }));
                     layer.on('mouseout', () => layer.setStyle({ fillOpacity: 0.25 }));
                 }
