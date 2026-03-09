@@ -222,6 +222,7 @@
             const stageFilter = document.getElementById('stageFilter').value;
             const typeFilter = document.getElementById('typeFilter').value;
             const showJungbi = document.getElementById('showJungbi').checked;
+            const onlyMatched = document.getElementById('onlyMatched').checked;
 
             if (geojsonLayer) map.removeLayer(geojsonLayer);
             if (!showJungbi || !geojsonData) return;
@@ -234,7 +235,8 @@
                     const type = p['구역유형'] || '';
                     const is3080 = type.includes('도심공공') || name.includes('3080');
 
-                    if (is3080) return false; // 3080+는 별도 레이어
+                    if (is3080) return false;
+                    if (onlyMatched && !matchedJungbiNames.has(name)) return false;
                     if (stageFilter && stage !== stageFilter) return false;
                     if (typeFilter === '재개발' && !type.includes('재개발') && !name.includes('재개발')) return false;
                     if (typeFilter === '재건축' && !type.includes('재건축') && !name.includes('재건축')) return false;
@@ -280,8 +282,13 @@
         function toggleDosim() {
             if (dosimLayer) map.removeLayer(dosimLayer);
             if (!document.getElementById('showDosim').checked || !dosimData) return;
+            const onlyMatched = document.getElementById('onlyMatched').checked;
 
             dosimLayer = L.geoJSON(dosimData, {
+                filter: feature => {
+                    if (!onlyMatched) return true;
+                    return matchedDosimNames.has(feature.properties['DGM_NM']);
+                },
                 style: { color: '#F44336', weight: 3, opacity: 0.9, fillColor: '#F44336', fillOpacity: 0.35 },
                 onEachFeature: (feature, layer) => {
                     const p = feature.properties;
@@ -308,8 +315,14 @@
         function toggleSintong() {
             if (sintongLayer) map.removeLayer(sintongLayer);
             if (!document.getElementById('showSintong').checked || !sintongData) return;
+            const onlyMatched = document.getElementById('onlyMatched').checked;
 
             sintongLayer = L.geoJSON(sintongData, {
+                filter: feature => {
+                    if (!onlyMatched) return true;
+                    const name = feature.properties['자치구'] + ' ' + feature.properties['구역명'];
+                    return matchedSintongNames.has(name);
+                },
                 style: { color: '#00BCD4', weight: 2, opacity: 0.8, fillColor: '#00BCD4', fillOpacity: 0.25, dashArray: '5,5' },
                 onEachFeature: (feature, layer) => {
                     const p = feature.properties;
@@ -335,8 +348,14 @@
         function toggleMoatown() {
             if (moatownLayer) map.removeLayer(moatownLayer);
             if (!document.getElementById('showMoatown').checked || !moatownData) return;
+            const onlyMatched = document.getElementById('onlyMatched').checked;
 
             moatownLayer = L.geoJSON(moatownData, {
+                filter: feature => {
+                    if (!onlyMatched) return true;
+                    const name = feature.properties['자치구'] + ' ' + feature.properties['위치'];
+                    return matchedMoatownNames.has(name);
+                },
                 style: { color: '#8BC34A', weight: 2, opacity: 0.8, fillColor: '#8BC34A', fillOpacity: 0.25, dashArray: '3,3' },
                 onEachFeature: (feature, layer) => {
                     const p = feature.properties;
@@ -359,27 +378,34 @@
             }).addTo(map);
         }
 
-        function toggleOnlyMatched() {
-            const onlyMatched = document.getElementById('onlyMatched').checked;
-            const ctrlGroup = document.querySelector('.ctrl-group');
+        // 매물이 있는 구역명 목록
+        let matchedJungbiNames = new Set();
+        let matchedDosimNames = new Set();
+        let matchedSintongNames = new Set();
+        let matchedMoatownNames = new Set();
 
-            if (onlyMatched) {
-                // 폴리곤 레이어 숨기기
-                if (geojsonLayer) map.removeLayer(geojsonLayer);
-                if (dosimLayer) map.removeLayer(dosimLayer);
-                if (sintongLayer) map.removeLayer(sintongLayer);
-                if (moatownLayer) map.removeLayer(moatownLayer);
-                // 체크박스 숨기기
-                ctrlGroup.style.opacity = '0.3';
-            } else {
-                // 체크박스 보이기
-                ctrlGroup.style.opacity = '1';
-                // 레이어 복원
-                applyFilters();
-                toggleDosim();
-                toggleSintong();
-                toggleMoatown();
-            }
+        function buildMatchedSets() {
+            matchedJungbiNames.clear();
+            matchedDosimNames.clear();
+            matchedSintongNames.clear();
+            matchedMoatownNames.clear();
+
+            if (!maemulData) return;
+            maemulData.features.forEach(f => {
+                const p = f.properties;
+                if (p['정비구역']) matchedJungbiNames.add(p['정비구역']);
+                if (p['도심공공']) matchedDosimNames.add(p['도심공공']);
+                if (p['신통구역']) matchedSintongNames.add(p['신통구역']);
+                if (p['모아타운']) matchedMoatownNames.add(p['모아타운']);
+            });
+        }
+
+        function toggleOnlyMatched() {
+            buildMatchedSets();
+            applyFilters();
+            toggleDosim();
+            toggleSintong();
+            toggleMoatown();
             toggleMaemul();
         }
 
